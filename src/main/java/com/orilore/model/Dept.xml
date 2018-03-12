@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.orilore.mapper.DeptMapper">
+	<resultMap type="Dept" id="deptResultMap">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<collection property="persons" ofType="Person">
+			<id column="pid" property="id"/>
+			<result column="pname" property="name"/>
+			<result column="sex" property="sex"/>
+			<result column="birthday" property="birthday"/>
+			<result column="phone" property="phone"/>
+			<result column="addr" property="addr"/>
+		</collection>
+	</resultMap>
+	<select id="selectOne" parameterType="int" resultMap="deptResultMap">
+		select a.id pid,a.name pname,a.sex,a.birthday,a.phone,a.addr,b.id,b.name 
+		from person a left join dept b 
+		on a.deptid=b.id 
+		where b.id=#{0}
+	</select>
+	
+
+	<insert id="insert"  useGeneratedKeys="true"  keyProperty="id" parameterType="Person">
+		insert into person(name,sex,birthday,phone,addr) values(#{name},#{sex},#{birthday},#{phone},#{addr})
+	</insert>	
+</mapper>
